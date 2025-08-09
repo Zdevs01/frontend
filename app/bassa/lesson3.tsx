@@ -18,7 +18,7 @@ import Colors from '@/assets/fonts/color.js';
 import Nav from '@/components/Nav';
 
 const colors = [
-  { label: 'j ai : gwě', file: require('../../assets/sounds/bassa/verbe2/1.wav') },
+  { label: 'j ai : gwě', file: require('@/assets/sounds/bassa/verbe2/1.wav') },
   { label: 'tu as : gwě', file: require('../../assets/sounds/bassa/verbe2/2.wav') },
   { label: 'il ou elle as : gwě', file: require('../../assets/sounds/bassa/verbe2/3.wav') },
   { label: 'Nous avons : gwě', file: require('../../assets/sounds/bassa/verbe2/4.wav') },
