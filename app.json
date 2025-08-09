@@ -18,7 +18,10 @@
     },
     "android": {
       "package": "com.durane237.mulemafront",
-      "permissions": ["RECORD_AUDIO", "MODIFY_AUDIO_SETTINGS"],
+      "permissions": [
+        "RECORD_AUDIO",
+        "MODIFY_AUDIO_SETTINGS"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/log2.png",
         "backgroundColor": "#ffffff"
@@ -56,6 +59,7 @@
     "jsEngine": "hermes",
     "updates": {
       "fallbackToCacheTimeout": 0
-    }
+    },
+    "owner": "durane237"
   }
 }

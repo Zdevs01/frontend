@@ -21,7 +21,7 @@ const colors = [
   { label: 'Noir : mundo', file: require('../../assets/sounds/douala/couleur/noir.wav') },
   { label: 'Blanc : sánga', file: require('../../assets/sounds/douala/couleur/blanc.wav') },
   { label: 'Jaune : njabi', file: require('../../assets/sounds/douala/couleur/jaune.wav') },
-  { label: 'Orange : epumá', file: require('../../assets/sounds/douala/couleur/orange.wav') },
+ 
   { label: 'Rouge : jóla', file: require('../../assets/sounds/douala/couleur/rouge.wav') },
   { label: 'Bleu : bulu', file: require('../../assets/sounds/douala/couleur/bleu.wav') },
   { label: 'Vert : musono mw’éyadí', file: require('../../assets/sounds/douala/couleur/vert.wav') },

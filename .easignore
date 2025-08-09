@@ -29,7 +29,7 @@ assets/audios/
 assets/large/
 
 # Si tu as des vidéos ou fichiers lourds, place-les ici temporairement
-*.mp4
+
 *.mov
 *.avi
 *.mkv
