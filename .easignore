@@ -33,11 +33,11 @@ assets/large/
 *.mov
 *.avi
 *.mkv
-*.wav
+
 *.zip
 *.rar
 
 
 # Ne pas inclure les vidéos, audios ou assets inutiles (tu peux affiner)
-assets/sounds/
+
 

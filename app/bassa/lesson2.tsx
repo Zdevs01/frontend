@@ -16,7 +16,7 @@ import Colors from '@/assets/fonts/color.js';
 import Nav from '@/components/Nav';
 
 const pronouns = [
-  { label: 'j achete : Mɛ ̀ Ńsɔ́mb ', file: require('../../assets/sounds/bassa/verbe1/1.wav') },
+  { label: 'j achete : Mɛ ̀ Ńsɔ́mb ', file: require('@/assets/sounds/bassa/verbe1/1.wav') },
   { label: 'tu achete : U Ńsɔ́mb ', file: require('../../assets/sounds/bassa/verbe1/2.wav') },
   { label: 'il ou elle achete : A Ńsɔ́mb ', file: require('../../assets/sounds/bassa/verbe1/3.wav') },
   { label: 'nous achetons : Di Ńsɔ́mb ', file: require('../../assets/sounds/bassa/verbe1/4.wav') },
