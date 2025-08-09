@@ -143,7 +143,7 @@ const Nav1: React.FC = () => {
   return (
     <>
       <View style={styles.nav}>
-        <TouchableWithoutFeedback onPress={() => router.push('/')}>
+        <TouchableWithoutFeedback onPress={() => router.push('/home2')}>
           <Image source={require('@/assets/images/logo.png')} style={styles.logo} />
         </TouchableWithoutFeedback>
 

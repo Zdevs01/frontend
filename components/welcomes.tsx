@@ -1,161 +1,173 @@
-import React, { useEffect, useRef, useState } from "react";
+import Colors from "@/assets/fonts/color";
+import React, { useRef, useEffect } from "react";
 import {
   View,
   StyleSheet,
-  Dimensions,
-  StatusBar,
+  Animated,
+  Image,
   Text,
+  Dimensions,
 } from "react-native";
-import { Video, Audio } from "expo-av";
-import { useRouter } from "expo-router";
 
-const introVideo = require("@/assets/videos/intro.mp4");
 const { width, height } = Dimensions.get("window");
 
 export default function LoadingScreen() {
-  const videoRef = useRef(null);
-  const soundRef = useRef(null);
-  const router = useRouter();
-  const [countdown, setCountdown] = useState(4);
+  const animatedHeight = useRef(new Animated.Value(0)).current;
+  const animatedValues = useRef([]).current;
 
+  const text = "muléma".split("");
+
+  if (animatedValues.length === 0) {
+    text.forEach(() => {
+      animatedValues.push({
+        opacity: new Animated.Value(0),
+        translateY: new Animated.Value(0),
+      });
+    });
+  }
+
+  // Animation de la montée
   useEffect(() => {
-    console.log("🎬 LoadingScreen DÉMARRÉ");
-    
-    let isMounted = true;
+    const steps = 5;
+    const totalDuration = 3000;
+    const stepDuration = totalDuration / steps;
 
-    // Configuration audio
-    const setupAudio = async () => {
-      try {
-        await Audio.setAudioModeAsync({
-          allowsRecordingIOS: false,
-          playsInSilentModeIOS: true,
-        });
+    const stepValues = Array.from({ length: steps }, (_, i) => i / (steps - 1));
 
-        const { sound } = await Audio.Sound.createAsync(
-          require("@/assets/sounds/mood.mp3"),
-          { shouldPlay: true, volume: 0.3 }
-        );
-        
-        if (isMounted) {
-          soundRef.current = sound;
-          console.log("✅ Audio démarré");
-        }
-      } catch (error) {
-        console.log("❌ Erreur audio:", error);
-      }
-    };
+    const animations = stepValues.map((toValue) =>
+      Animated.timing(animatedHeight, {
+        toValue,
+        duration: stepDuration,
+        useNativeDriver: false,
+      })
+    );
 
-    setupAudio();
+    Animated.sequence(animations).start();
+  }, [animatedHeight]);
 
-    // TIMER DIRECT - Navigation après exactement 4 secondes
-    const startTime = Date.now();
-    console.log("⏱️ Timer 4s lancé à:", new Date().toLocaleTimeString());
+  // Animation des lettres
+  useEffect(() => {
+    const animations = animatedValues.map(({ opacity, translateY }, index) =>
+      Animated.sequence([
+        Animated.delay(index * 300),
+        Animated.parallel([
+          Animated.timing(opacity, {
+            toValue: 1,
+            duration: 500,
+            useNativeDriver: true,
+          }),
+          Animated.sequence([
+            Animated.timing(translateY, {
+              toValue: -20,
+              duration: 300,
+              useNativeDriver: true,
+            }),
+            Animated.timing(translateY, {
+              toValue: 0,
+              duration: 300,
+              useNativeDriver: true,
+            }),
+          ]),
+        ]),
+      ])
+    );
 
-    // Compteurs individuels pour le debug
-    const timer1 = setTimeout(() => {
-      if (isMounted) {
-        console.log("⏰ 3 secondes restantes");
-        setCountdown(3);
-      }
-    }, 1000);
-
-    const timer2 = setTimeout(() => {
-      if (isMounted) {
-        console.log("⏰ 2 secondes restantes");
-        setCountdown(2);
-      }
-    }, 2000);
-
-    const timer3 = setTimeout(() => {
-      if (isMounted) {
-        console.log("⏰ 1 seconde restante");
-        setCountdown(1);
-      }
-    }, 3000);
-
-    // NAVIGATION EXACTEMENT À 4 SECONDES
-    const navigationTimer = setTimeout(() => {
-      if (isMounted) {
-        const duration = Date.now() - startTime;
-        console.log("🚀 NAVIGATION après", duration, "ms");
-        
-        // Cleanup audio
-        if (soundRef.current) {
-          soundRef.current.unloadAsync().catch(() => {});
-        }
-        
-        // Navigation
-        router.replace("/login");
-      }
-    }, 4000); // EXACTEMENT 4000ms
-
-    // Cleanup function
-    return () => {
-      console.log("🧹 CLEANUP LoadingScreen");
-      isMounted = false;
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-      clearTimeout(timer3);
-      clearTimeout(navigationTimer);
-      
-      if (soundRef.current) {
-        soundRef.current.unloadAsync().catch(() => {});
-      }
-    };
-  }, []); // PAS de dépendances pour éviter les re-renders
-
-  const onVideoLoad = (status) => {
-    console.log("📹 Vidéo:", status.isLoaded ? "chargée" : "en cours...");
-  };
+    Animated.stagger(200, animations).start();
+  }, [animatedValues]);
 
   return (
-    <View style={styles.container}>
-      <StatusBar hidden={true} />
-      
-      {/* Vidéo */}
-      <Video
-        ref={videoRef}
-        source={introVideo}
-        style={styles.video}
-        shouldPlay={true}
-        isLooping={false}
-        resizeMode="cover"
-        onLoad={onVideoLoad}
-        useNativeControls={false}
-        volume={1.0}
-      />
-      
-      {/* Compteur visible */}
-      <View style={styles.counter}>
-        <Text style={styles.counterText}>{countdown}s</Text>
+    <View style={styles.loadingContainer}>
+      <View style={styles.case}>
+        <View style={styles.img}>
+          <Image
+            source={require("@/assets/images/noix.png")}
+            style={styles.image}
+            resizeMode="contain"
+          />
+        </View>
+
+        <Animated.View
+          style={[
+            styles.animatedContainer,
+            {
+              height: animatedHeight.interpolate({
+                inputRange: [0, 1],
+                outputRange: ["0%", "100%"],
+              }),
+            },
+          ]}
+        >
+          <Image
+            source={require("@/assets/images/fisure2.png")}
+            style={styles.images}
+            resizeMode="contain"
+          />
+        </Animated.View>
+      </View>
+
+      <View style={styles.letterRow}>
+        {text.map((letter, index) => (
+          <Animated.Text
+            key={index}
+            style={[
+              styles.textload,
+              {
+                opacity: animatedValues[index]?.opacity,
+                transform: [{ translateY: animatedValues[index]?.translateY }],
+              },
+            ]}
+          >
+            {letter}
+          </Animated.Text>
+        ))}
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  loadingContainer: {
     flex: 1,
-    backgroundColor: "#000",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: Colors.white,
   },
-  video: {
+  case: {
+    overflow: "hidden",
+    width: width * 0.25,
+    height: height * 0.25,
+    position: "relative",
+  },
+  img: {
     width: "100%",
     height: "100%",
-    backgroundColor: "#000",
+    position: "absolute",
+    justifyContent: "center",
+    alignItems: "center",
   },
-  counter: {
-    position: 'absolute',
-    top: 80,
-    right: 30,
-    backgroundColor: 'rgba(255,255,255,0.9)',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 20,
-    alignItems: 'center',
+  image: {
+    width: "60%",
+    height: "60%",
   },
-  counterText: {
-    color: 'black',
-    fontSize: 20,
-    fontWeight: 'bold',
+  animatedContainer: {
+    width: "100%",
+    position: "absolute",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  images: {
+    width: 30,
+    height: "50%",
+  },
+  letterRow: {
+    flexDirection: "row",
+    marginTop: 20,
+  },
+  textload: {
+    fontSize: 30,
+    color: "rgb(199, 46, 51)",
+    fontWeight: "700",
+    fontFamily: "Nunito-Regular", // S'assurer qu'elle est bien chargée
+    marginHorizontal: 2,
   },
 });

@@ -352,38 +352,3 @@ export const forceStopBackgroundSound = () => {
   const manager = BackgroundSoundManager.getInstance();
   return manager.forceStop();
 };
-
-/*
-UTILISATION CORRECTE :
-
-✅ Page AVEC son :
-import BackgroundSound from '@/components/son';
-
-function AccueilPage() {
-  return (
-    <View>
-      <BackgroundSound volume={0.1} />
-      <Text>Cette page a du son</Text>
-    </View>
-  );
-}
-
-❌ Page SANS son :
-// PAS d'import BackgroundSound du tout !
-
-function ParametresPage() {
-  return (
-    <View>
-      <Text>Cette page est silencieuse</Text>
-    </View>
-  );
-}
-
-🔧 Debug en cas de problème :
-import { debugBackgroundSound, forceStopBackgroundSound } from '@/components/son';
-
-// Dans votre composant
-console.log(debugBackgroundSound());
-// ou pour forcer l'arrêt
-forceStopBackgroundSound();
-*/
