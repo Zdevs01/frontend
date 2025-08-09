@@ -24,15 +24,13 @@ coverage/
 *.spec.*
 
 # Évite d’envoyer de grosses ressources inutiles
-assets/videos/
-assets/audios/
+
+
 assets/large/
 
 # Si tu as des vidéos ou fichiers lourds, place-les ici temporairement
 
-*.mov
-*.avi
-*.mkv
+
 
 *.zip
 *.rar

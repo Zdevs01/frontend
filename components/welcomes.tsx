@@ -9,7 +9,7 @@ import {
 import { Video, Audio } from "expo-av";
 import { useRouter } from "expo-router";
 
-const introVideo = require("../assets/videos/intro.mp4");
+const introVideo = require("@/assets/videos/intro.mp4");
 const { width, height } = Dimensions.get("window");
 
 export default function LoadingScreen() {
@@ -32,7 +32,7 @@ export default function LoadingScreen() {
         });
 
         const { sound } = await Audio.Sound.createAsync(
-          require("../assets/sounds/mood.mp3"),
+          require("@/assets/sounds/mood.mp3"),
           { shouldPlay: true, volume: 0.3 }
         );
         
