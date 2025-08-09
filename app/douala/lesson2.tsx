@@ -1,0 +1,283 @@
+import React, { useState } from 'react';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  ActivityIndicator,
+  Image,
+  Animated,
+} from 'react-native';
+import { Audio } from 'expo-av';
+import { useFonts } from 'expo-font';
+import { useRouter } from 'expo-router';
+import Colors from '@/assets/fonts/color.js';
+import Nav from '@/components/Nav';
+
+const pronouns = [
+  { label: 'Moi : mba', file: require('../../assets/sounds/douala/pronom/moi.wav') },
+  { label: 'Toi : wa', file: require('../../assets/sounds/douala/pronom/toi.wav') },
+  { label: 'Lui : mɔ́', file: require('../../assets/sounds/douala/pronom/lui.wav') },
+  { label: 'Nous : bisɔ́', file: require('../../assets/sounds/douala/pronom/nous.wav') },
+  { label: 'Vous : binyɔ́', file: require('../../assets/sounds/douala/pronom/vous.wav') },
+  { label: 'Eux : babó', file: require('../../assets/sounds/douala/pronom/eux.wav') },
+];
+
+export default function DoualaPronounLesson() {
+  const router = useRouter();
+  const [fontsLoaded] = useFonts({
+    'SpaceMono-Regular': require('@/assets/fonts/SpaceMono-Regular.ttf'),
+  });
+
+  const [played, setPlayed] = useState<number[]>([]);
+  const [isPlaying, setIsPlaying] = useState<number | null>(null);
+  const [mascotAnim] = useState(new Animated.Value(1));
+  const [successAnim] = useState(new Animated.Value(0));
+  const [showConfetti, setShowConfetti] = useState(false);
+
+  const playSuccessSound = async () => {
+    try {
+      const { sound } = await Audio.Sound.createAsync(
+        require('@/assets/sounds/success.mp3')
+      );
+      await sound.playAsync();
+    } catch (error) {
+      console.log('Erreur son de réussite :', error);
+    }
+  };
+
+  const handlePlay = async (index: number) => {
+    try {
+      setIsPlaying(index);
+      animateMascot();
+      const { sound } = await Audio.Sound.createAsync(pronouns[index].file);
+      await sound.playAsync();
+      sound.setOnPlaybackStatusUpdate((status) => {
+        if (status.didJustFinish) {
+          setIsPlaying(null);
+        }
+      });
+      if (!played.includes(index)) {
+        const newPlayed = [...played, index];
+        setPlayed(newPlayed);
+        if (newPlayed.length === pronouns.length) {
+          triggerSuccessAnimation();
+          await playSuccessSound();
+        }
+      }
+    } catch (err) {
+      console.log('Erreur audio :', err);
+    }
+  };
+
+  const animateMascot = () => {
+    Animated.sequence([
+      Animated.timing(mascotAnim, {
+        toValue: 1.1,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+      Animated.timing(mascotAnim, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  };
+
+  const triggerSuccessAnimation = () => {
+    setShowConfetti(true);
+    Animated.timing(successAnim, {
+      toValue: 1,
+      duration: 800,
+      useNativeDriver: true,
+    }).start(() => {
+      setTimeout(() => setShowConfetti(false), 2000);
+    });
+  };
+
+  const isLessonCompleted = played.length === pronouns.length;
+
+  if (!fontsLoaded) {
+    return <ActivityIndicator size="large" color="#0000ff" />;
+  }
+
+  return (
+    <View style={styles.container}>
+      <Nav />
+   
+<TouchableOpacity style={styles.backButton} onPress={() => router.push('/sage')}>
+  <Text style={styles.backButtonText}>⬅️ Retour</Text>
+</TouchableOpacity>
+
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <Text style={styles.title}>📖 Leçon 2 : Les pronoms personnels</Text>
+        <Text style={styles.instruction}>🎧 Appuie sur chaque mot pour écouter</Text>
+
+        <Animated.Image
+          source={require('@/assets/images/mascotte.png')}
+          style={[
+            styles.mascot,
+            {
+              transform: [{ scale: mascotAnim }],
+            },
+          ]}
+        />
+
+{showConfetti && (
+  <Animated.View style={[styles.confettiContainer, { opacity: successAnim }]}>
+    <Image source={require('@/assets/images/star.png')} style={styles.starIcon} />
+    <Text style={styles.confettiText}>🎉 Bravo !</Text>
+  </Animated.View>
+)}
+
+
+        {pronouns.map((item, index) => (
+          <TouchableOpacity
+            key={index}
+            style={[
+              styles.item,
+              played.includes(index) && styles.played,
+              isPlaying === index && styles.playing,
+            ]}
+            onPress={() => handlePlay(index)}
+          >
+            <Image
+              source={require('@/assets/images/audio.png')}
+              style={styles.audioIcon}
+            />
+            <Text style={styles.itemText}>{item.label}</Text>
+          </TouchableOpacity>
+        ))}
+
+        <TouchableOpacity
+          style={[styles.nextButton, !isLessonCompleted && styles.disabledButton]}
+          disabled={!isLessonCompleted}
+          onPress={() => router.push('/douala/lesson3')}
+        >
+          <Text style={styles.nextButtonText}>
+            {isLessonCompleted ? '✅ Leçon suivante' : 'Terminez la leçon'}
+          </Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fffefb',
+    paddingTop: 70,
+  },
+
+  confettiContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  starIcon: {
+    width: 36,
+    height: 36,
+    marginRight: 10,
+  },
+  
+
+  backButton: {
+    position: 'absolute',
+    top: 70,
+    left: 20,
+    backgroundColor: '#eee',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: '#bbb',
+    zIndex: 999,
+  },
+  backButtonText: {
+    color: '#333',
+    fontWeight: '600',
+    fontSize: 14,
+  },
+  
+  scrollContainer: {
+    padding: 20,
+    paddingBottom: 100,
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: '700',
+    textAlign: 'center',
+    marginBottom: 8,
+    color: Colors.logo,
+  },
+  instruction: {
+    fontSize: 15,
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  item: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f3f3f3',
+    padding: 15,
+    borderRadius: 14,
+    marginBottom: 12,
+    borderWidth: 2,
+    borderColor: Colors.gris,
+  },
+  played: {
+    backgroundColor: '#dcfce7',
+    borderColor: '#15803d',
+  },
+  playing: {
+    backgroundColor: '#e0e7ff',
+    borderColor: '#4338ca',
+  },
+  itemText: {
+    fontSize: 16,
+    marginLeft: 15,
+    fontWeight: '600',
+  },
+  audioIcon: {
+    width: 24,
+    height: 24,
+  },
+  mascot: {
+    width: 100,
+    height: 100,
+    alignSelf: 'center',
+    marginBottom: 25,
+  },
+  nextButton: {
+    backgroundColor: Colors.logo2,
+    paddingVertical: 15,
+    marginTop: 30,
+    borderRadius: 25,
+    alignItems: 'center',
+    borderBottomWidth: 4,
+    borderColor: Colors.logo,
+  },
+  nextButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+  },
+  disabledButton: {
+    backgroundColor: '#ccc',
+    borderColor: '#999',
+  },
+  confetti: {
+    alignSelf: 'center',
+    marginBottom: 20,
+  },
+  confettiText: {
+    fontSize: 22,
+    color: 'green',
+    fontWeight: '800',
+  },
+});

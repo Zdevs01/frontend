@@ -1,0 +1,43 @@
+# Ignorer les dépendances locales
+node_modules/
+
+# Fichiers temporaires Expo
+.expo/
+.expo-shared/
+
+# Builds locaux
+android/
+ios/
+build/
+dist/
+web-build/
+
+# Logs et fichiers inutiles
+*.log
+*.env
+*.DS_Store
+
+# Caches ou résultats de tests
+coverage/
+.bundles/
+*.test.*
+*.spec.*
+
+# Évite d’envoyer de grosses ressources inutiles
+assets/videos/
+assets/audios/
+assets/large/
+
+# Si tu as des vidéos ou fichiers lourds, place-les ici temporairement
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.wav
+*.zip
+*.rar
+
+
+# Ne pas inclure les vidéos, audios ou assets inutiles (tu peux affiner)
+assets/sounds/
+

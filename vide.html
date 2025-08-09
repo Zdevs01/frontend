@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Step-by-Step Loader with App Progress</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 50px;
+    }
+    #progress-container {
+      width: 100%;
+      max-width: 400px;
+      background-color: #f3f3f3;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin: 20px auto;
+      overflow: hidden;
+    }
+    #progress-bar {
+      width: 0%;
+      height: 30px;
+      background-color: #4caf50;
+      transition: width 0.2s ease;
+    }
+    #counter {
+      margin-top: 10px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Chargement de l'application...</h1>
+  <div id="progress-container">
+    <div id="progress-bar"></div>
+  </div>
+  <div id="counter">0%</div>
+
+  <script>
+    const progressBar = document.getElementById("progress-bar");
+    const counterDisplay = document.getElementById("counter");
+
+    // Simuler une fonction existante pour retourner le pourcentage de chargement
+    function getAppLoadProgress() {
+      // Exemple de simulation : progression de 1 à 100 en 5 secondes
+      const totalDuration = 5000; // en ms
+      const startTime = performance.now(); // Temps de démarrage
+      return () => {
+        const elapsedTime = performance.now() - startTime;
+        const progress = Math.min((elapsedTime / totalDuration) * 100, 100); // Limite à 100%
+        return Math.floor(progress); // Retourne un entier
+      };
+    }
+
+    // Appel de la fonction simulée
+    const getProgress = getAppLoadProgress();
+
+    // Fonction pour mettre à jour le loader
+    function updateLoader() {
+      const progress = getProgress(); // Obtenir le pourcentage actuel
+      progressBar.style.width = progress + "%"; // Met à jour la largeur de la barre
+      counterDisplay.textContent = progress + "%"; // Affiche le pourcentage
+
+      if (progress < 100) {
+        requestAnimationFrame(updateLoader); // Continue tant que ce n'est pas terminé
+      } else {
+        counterDisplay.textContent = "Chargement terminé !";
+      }
+    }
+
+    // Démarrer la mise à jour
+    updateLoader();
+  </script>
+</body>
+</html>

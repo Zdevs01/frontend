@@ -1,0 +1,25 @@
+{
+    "Tabs":{
+        "name0":"Leçons",
+        "name1":"Communauté",
+        "name2":"Accueil",
+        "name3":"Profil"
+    },
+    "profil":{
+        "titre":"Profil",
+        "phrase1":"Nom d'utilisateur",
+        "phrase2":"Membre depuis le",
+        "phrase3":"Follower",
+        "phrase4":"Modifier",
+        "phrase5":"Messages",
+        "phrase6":"Vos Statistiques",
+        "phrase7":"Challenges",
+        "phrase8":"Leçons terminés",
+        "phrase9":"Total XP",
+        "phrase10":"Challenge"
+    },
+    "exercices":{
+        "phrase0":"Niveau 1",
+        "phrase1":"Débloquez les niveaux suivant en resolvant les ewercices de ceux précedent",
+    }
+}

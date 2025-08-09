@@ -1,0 +1,61 @@
+{
+  "expo": {
+    "name": "Mulema",
+    "slug": "mulema-front",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/log.png",
+    "scheme": "myapp",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/images/log2.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.durane237.mulemafront"
+    },
+    "android": {
+      "package": "com.durane237.mulemafront",
+      "permissions": ["RECORD_AUDIO", "MODIFY_AUDIO_SETTINGS"],
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/log2.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/log.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/log2.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#ffffff"
+        }
+      ],
+      "expo-font"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "24b29075-7b34-450a-b05d-56e9bb9b5876"
+      }
+    },
+    "jsEngine": "hermes",
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    }
+  }
+}
