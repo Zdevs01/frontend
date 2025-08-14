@@ -22,7 +22,7 @@ import {
 } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 
-const API_URL = "http://168.231.116.58:3000";
+const API_URL = "https://api.vawe-africa.com";
 const { width, height } = Dimensions.get('window');
 
 const Login = () => {
